@@ -1,0 +1,9 @@
+#***************************************************************#
+#                                                               #
+# Changelog of check_satellite_service plugin for Icinga/Nagios #
+#                                                               #
+#***************************************************************#
+
+* 0.1.0 - Thu Nov 03 2016
+- This is the first public beta release of new plugin check_satellite_service
+

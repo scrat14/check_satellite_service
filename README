@@ -1,0 +1,12 @@
+#*************************************************************#
+#                                                             #
+# README for check_satellite_service plugin for Icinga/Nagios #
+#                                                             #
+#*************************************************************#
+
+What is check_satellite_service?
+================================
+
+This plugin for Icinga/Nagios is used to monitor required services
+running for Red Hat Satellite 6 / Katello.
+
