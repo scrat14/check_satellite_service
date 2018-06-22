@@ -1,5 +1,5 @@
 Name:		nagios-plugins-satellite_service
-Version:	0.1
+Version:	0.2
 Release:	1%{?dist}
 Summary:	Red Hat Satellite 6 plugin for Icinga/Nagios
 
@@ -42,5 +42,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jun 22 2018 Rene Koch <rkoch@rk-it.at> 0.2-1
+- Fix path to katello-service as it changed in Satellite 6.3
 * Thu Nov 03 2016 Rene Koch <rkoch@rk-it.at> 0.1-1
 - Initial build.

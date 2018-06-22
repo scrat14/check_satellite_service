@@ -4,6 +4,8 @@
 #                                                               #
 #***************************************************************#
 
+* 0.2.0 - Fri Jun 22 2018
+- Fix path to katello-service as it changed in Satellite 6.3
 * 0.1.0 - Thu Nov 03 2016
 - This is the first public beta release of new plugin check_satellite_service
 

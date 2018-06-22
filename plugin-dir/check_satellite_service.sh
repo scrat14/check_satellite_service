@@ -4,10 +4,11 @@
 #                                                           #
 #  Name:    check_satellite_service                         #
 #                                                           #
-#  Version: 0.1                                             #
+#  Version: 0.2                                             #
 #  Created: 2016-11-03                                      #
+#  Last modified: 2018-06-22                                #
 #  License: GPLv3 - http://www.gnu.org/licenses             #
-#  Copyright: (c)2016 René Koch                             #
+#  Copyright: (c)2016-2018 René Koch                        #
 #  Author:  René Koch <rkoch@rk-it.at>                      #
 #  URL: https://github.com/scrat14/check_satellite_service  #
 #                                                           #
@@ -27,11 +28,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Changelog:
-# * 0.1.0 - Thu Nov 3 2013 - René Koch <rkoch@rk-it.at>
+# * 0.2.0 - Fri Jun 22 2018 - René Koch <rkoch@rk-it.at>
+# - Fix path to katello-service as it changed in Satellite 6.3
+# * 0.1.0 - Thu Nov 3 2016 - René Koch <rkoch@rk-it.at>
 # - This is the first release of new plugin check_satellite_service
 
-# Configuration
-KATELLO_SERVICE="/usr/bin/katello-service"
 
 # Variables
 PROG="check_satellite_service"
@@ -110,6 +111,11 @@ while test -n "$1"; do
       
 done
 
+# Get path to katello-service
+KATELLO_SERVICE="/usr/bin/katello-service"
+if [ -x "/usr/sbin/katello-service" ]; then
+  KATELLO_SERVICE="/usr/sbin/katello-service"
+fi
 
 # Get status of Satellite services
 if [ ${VERBOSE} -eq 1 ]; then
