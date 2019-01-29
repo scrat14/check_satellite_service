@@ -130,7 +130,7 @@ if [ ${VERBOSE} -eq 1 ]; then
 fi
 
 if [ "${KATELLO_SERVICE}" == "/bin/foreman-maintain" ]; then
-  KATELLO=`${KATELLO_SERVICE} service status 2>/dev/null`
+  KATELLO=`${KATELLO_SERVICE} service status 2>/dev/null | grep 'Some services are not running'`
   if [ $? -eq 0 ]; then
     echo "Satellite CRITICAL: ${KATELLO}"
     exit ${STATUS_CRITICAL}
