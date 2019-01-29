@@ -4,6 +4,8 @@
 #                                                               #
 #***************************************************************#
 
+* 0.3.0 - Tue Jan 29 2019 - René Koch <rkoch@rk-it.at>
+- Use foreman-maintain as it changed in Satellite 6.4
 * 0.2.0 - Fri Jun 22 2018
 - Fix path to katello-service as it changed in Satellite 6.3
 * 0.1.0 - Thu Nov 03 2016

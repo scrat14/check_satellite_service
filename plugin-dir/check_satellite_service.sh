@@ -4,11 +4,11 @@
 #                                                           #
 #  Name:    check_satellite_service                         #
 #                                                           #
-#  Version: 0.2                                             #
+#  Version: 0.3                                             #
 #  Created: 2016-11-03                                      #
-#  Last modified: 2018-06-22                                #
+#  Last modified: 2019-01-29                                #
 #  License: GPLv3 - http://www.gnu.org/licenses             #
-#  Copyright: (c)2016-2018 René Koch                        #
+#  Copyright: (c)2016-2019 René Koch                        #
 #  Author:  René Koch <rkoch@rk-it.at>                      #
 #  URL: https://github.com/scrat14/check_satellite_service  #
 #                                                           #
@@ -28,6 +28,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Changelog:
+# * 0.3.0 - Tue Jan 29 2019 - René Koch <rkoch@rk-it.at>
+# - Use foreman-maintain as it changed in Satellite 6.4
 # * 0.2.0 - Fri Jun 22 2018 - René Koch <rkoch@rk-it.at>
 # - Fix path to katello-service as it changed in Satellite 6.3
 # * 0.1.0 - Thu Nov 3 2016 - René Koch <rkoch@rk-it.at>
@@ -36,7 +38,7 @@
 
 # Variables
 PROG="check_satellite_service"
-VERSION="0.1"
+VERSION="0.3"
 VERBOSE=0
 STATUS=3
 
@@ -56,7 +58,7 @@ print_usage(){
 print_help(){
   echo ""
   echo "Red Hat Satellite 6 plugin for Icinga/Nagios version ${VERSION}"
-  echo "(c)2016 - Rene Koch <rkoch@rk-it.at>"
+  echo "(c)2016-2019 - Rene Koch <rkoch@rk-it.at>"
   echo ""
   echo ""
   print_usage
@@ -116,6 +118,10 @@ KATELLO_SERVICE="/usr/bin/katello-service"
 if [ -x "/usr/sbin/katello-service" ]; then
   KATELLO_SERVICE="/usr/sbin/katello-service"
 fi
+# Satellite 6.4 uses foreman-maintain instead
+if [ -x "/bin/foreman-maintain" ]; then
+  KATELLO_SERVICE="/bin/foreman-maintain"
+fi
 
 # Get status of Satellite services
 if [ ${VERBOSE} -eq 1 ]; then
@@ -123,18 +129,29 @@ if [ ${VERBOSE} -eq 1 ]; then
   echo "`${KATELLO_SERVICE} status 2>/dev/null`"
 fi
 
-KATELLO=`${KATELLO_SERVICE} status 2>/dev/null | tail -1`
-if [ $? -ne 0 ]; then
-  echo "Satellite UNKNOWN: exit code of ${KATELLO_SERVICE} not 0!"
-  exit ${STATUS_UNKNOWN}
-fi
-
-if [ "${KATELLO}" != "Success!" ]; then
-  echo "Satellite CRITICAL: ${KATELLO}"
-  exit ${STATUS_CRITICAL}
+if [ "${KATELLO_SERVICE}" == "/bin/foreman-maintain" ]; then
+  KATELLO=`${KATELLO_SERVICE} service status 2>/dev/null`
+  if [ $? -eq 0 ]; then
+    echo "Satellite CRITICAL: ${KATELLO}"
+    exit ${STATUS_CRITICAL}
+  else
+    echo "Satellite OK: All services are running!"
+    STATUS=${STATUS_OK}
+  fi
 else
-  echo "Satellite OK: All services are running!"
-  STATUS=${STATUS_OK}
+  KATELLO=`${KATELLO_SERVICE} status 2>/dev/null | tail -1`
+  if [ $? -ne 0 ]; then
+    echo "Satellite UNKNOWN: exit code of ${KATELLO_SERVICE} not 0!"
+    exit ${STATUS_UNKNOWN}
+  fi
+
+  if [ "${KATELLO}" != "Success!" ]; then
+    echo "Satellite CRITICAL: ${KATELLO}"
+    exit ${STATUS_CRITICAL}
+  else
+    echo "Satellite OK: All services are running!"
+    STATUS=${STATUS_OK}
+  fi
 fi
 
 exit ${STATUS}

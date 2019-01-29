@@ -20,8 +20,8 @@ AM_INIT_AUTOMAKE
 
 AC_PREFIX_DEFAULT(/usr/local/nagios/libexec)
 PKG_NAME="check_satellite_service"
-PKG_VERSION="0.2"
-PKG_REL_DATE="2018-06-22"
+PKG_VERSION="0.3"
+PKG_REL_DATE="2019-01-29"
 
 # Figure out how to invoke "install" and what install options to use
 AC_PROG_INSTALL
